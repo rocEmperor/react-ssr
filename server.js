@@ -51,38 +51,32 @@ app.post('/api/test', function (req, res) {
     })
 })
 
+app.post('/api/test1', function (req, res) {
+    res.send({
+        age: 'age很多很'
+    })
+})
+
 app.get('/*', async function (req, res) {
     try {
         let hit = global.routeMap[req.path];
         let initData = {};
         if (hit && hit.getInitialState) {
-            let promiseArray = await hit.getInitialState() || [];
-            // 请求数据
-            Promise.all(promiseArray).then((values) => {
-                values && values.forEach(function (item) {
-                    for (let k in item) {
-                        if (initData.hasOwnProperty(k)) {
-                            initData[k] = { ...initData[k], ...item[k] }
-                        } else {
-                            initData[k] = item[k]
-                        }
-                    }
-                })
-                const store = createStore(
-                    storeConfig.rootReducer,
-                    initData,
-                    applyMiddleware(sagaMiddleware, logger)
-                )
-                res.render('index.hbs', {
-                    _html: renderToString(
-                            <Provider store={store}>
-                                <RouterAppService req={req}/>
-                            </Provider>
-                        ),
-                    _initData: JSON.stringify(initData),
-                    ssr_model: true
-                });
-            })
+            initData = await hit.getInitialState() || {};
+            const store = createStore(
+                storeConfig.rootReducer,
+                initData,
+                applyMiddleware(sagaMiddleware, logger)
+            )
+            res.render('index.hbs', {
+                _html: renderToString(
+                        <Provider store={store}>
+                            <RouterAppService req={req}/>
+                        </Provider>
+                    ),
+                _initData: JSON.stringify(initData),
+                ssr_model: true
+            });
         } else {
             res.render('index.hbs', {
                 _html: renderToString(

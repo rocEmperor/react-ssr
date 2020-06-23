@@ -5,19 +5,13 @@ import './index.less';
 import img from '../../../static/images/1.jpg';
 
 class Home extends React.Component {
-    static getInitialState () {
-        return [
-            new Promise((resolve, reject) => {
-                Request({ url: 'api/test' }).then(function (data) {
-                    resolve({ homeModel: { name: data.name } })
-                })
-            }),
-            new Promise((resolve, reject) => {
-                Request({ url: 'api/test' }).then(function (data) {
-                    resolve({ homeModel: { age: 'age很多很' } })
-                })
-            })
-        ]
+    // 首次渲染时的钩子，写法上比较有限制（必须使用async + await），此钩子不管是服务端渲染还是单页面（SPA）渲染都会被调用
+    static async getInitialState () {
+        let { name } = await Request({ url: 'api/test' });
+        let { age } = await Request({ url: 'api/test1' });
+        return {
+            homeModel: { name, age }
+        }
     }
     constructor (props) {
         super(props)

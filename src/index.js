@@ -28,6 +28,7 @@ function renderEngine () {
     )
 }
 
+// 单页面渲染时的逻辑
 if (!window.ssr_model) {
     let path = window.location.pathname;
     let Component = undefined;
@@ -38,21 +39,14 @@ if (!window.ssr_model) {
     })
     if (Component.getInitialState) {
         let initData = {};
-        let promiseArray = Component.getInitialState();
-        Promise.all(promiseArray).then((values) => {
-            values && values.forEach(function (item) {
-                for (let k in item) {
-                    if (initData.hasOwnProperty(k)) {
-                        initData[k] = { ...initData[k], ...item[k] }
-                    } else {
-                        initData[k] = item[k]
-                    }
-                }
-            })
+        (async function () {
+            initData = await Component.getInitialState();
             window._initData = initData;
             renderEngine()
-        })
+        })()
+    } else {
+        renderEngine()
     }
-} else {
+} else { // 服务端渲染的逻辑
     renderEngine()
 }
