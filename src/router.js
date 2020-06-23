@@ -1,7 +1,8 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, StaticRouter } from "react-router-dom";
+import { BrowserRouter as Router, Route, StaticRouter, Switch } from "react-router-dom";
 import Home from './pages/home/index';
 import About from './pages/about/index';
+import NoFound from './pages/404/index';
 
 function parseRoute (target) {
     let data = [];
@@ -37,9 +38,12 @@ class RouterApp extends React.Component {
     render() {
         return (
             <Router>
-                {parseRouteList.map((item, index) => {
-                    return <Route path={item.path} component={item.component} key={index}/>
-                })}
+                <Switch>
+                    {parseRouteList.map((item, index) => {
+                        return <Route path={item.path} component={item.component} key={index}/>
+                    })}
+                    <Route path="*" component={NoFound}/>
+                </Switch>
             </Router>
         )
     }
@@ -56,9 +60,12 @@ class RouterAppService extends React.Component {
         return (
             // 注意，要添加location属性，不然渲染到页面的#react_app标签内是空内容，虽然效果已经是服务端渲染
             <StaticRouter location={req.path}>
-                {parseRouteList.map((item, index) => {
-                    return <Route path={item.path} component={item.component} key={index}/>
-                })}
+                <Switch>
+                    {parseRouteList.map((item, index) => {
+                        return <Route path={item.path} component={item.component} key={index}/>
+                    })}
+                    <Route path="*" component={NoFound}/>
+                </Switch>
             </StaticRouter>
         )
     }

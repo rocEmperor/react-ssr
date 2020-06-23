@@ -47,10 +47,10 @@ app.use('/ssr', express.static('dist'))
 
 app.get('/*', async function (req, res) {
     let hit = global.routeMap[req.path];
+    let initData = {};
     if (hit && hit.getInitialState) {
         let promiseArray = await hit.getInitialState() || [];
         Promise.all(promiseArray).then((values) => {
-            let initData = {};
             values && values.forEach(function (item) {
                 for (let k in item) {
                     if (initData.hasOwnProperty(k)) {
@@ -80,7 +80,8 @@ app.get('/*', async function (req, res) {
                     <Provider store={store}>
                         <RouterAppService req={req}/>
                     </Provider>
-                )
+                ),
+             _initData: JSON.stringify(initData)
         });
     }
 })
