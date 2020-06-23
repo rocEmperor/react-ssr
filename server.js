@@ -45,44 +45,63 @@ app.set('views', path.join(__dirname, 'dist'));
 app.use(express.static('dist')); // express 
 app.use('/ssr', express.static('dist'))
 
+app.post('/api/test', function (req, res) {
+    res.send({
+        name: '我是接口返回的数据'
+    })
+})
+
 app.get('/*', async function (req, res) {
-    let hit = global.routeMap[req.path];
-    let initData = {};
-    if (hit && hit.getInitialState) {
-        let promiseArray = await hit.getInitialState() || [];
-        Promise.all(promiseArray).then((values) => {
-            values && values.forEach(function (item) {
-                for (let k in item) {
-                    if (initData.hasOwnProperty(k)) {
-                        initData[k] = { ...initData[k], ...item[k] }
-                    } else {
-                        initData[k] = item[k]
+    try {
+        let hit = global.routeMap[req.path];
+        let initData = {};
+        if (hit && hit.getInitialState) {
+            let promiseArray = await hit.getInitialState() || [];
+            // 请求数据
+            Promise.all(promiseArray).then((values) => {
+                values && values.forEach(function (item) {
+                    for (let k in item) {
+                        if (initData.hasOwnProperty(k)) {
+                            initData[k] = { ...initData[k], ...item[k] }
+                        } else {
+                            initData[k] = item[k]
+                        }
                     }
-                }
+                })
+                const store = createStore(
+                    storeConfig.rootReducer,
+                    initData,
+                    applyMiddleware(sagaMiddleware, logger)
+                )
+                res.render('index.hbs', {
+                    _html: renderToString(
+                            <Provider store={store}>
+                                <RouterAppService req={req}/>
+                            </Provider>
+                        ),
+                    _initData: JSON.stringify(initData),
+                    ssr_model: true
+                });
             })
-            const store = createStore(
-                storeConfig.rootReducer,
-                initData,
-                applyMiddleware(sagaMiddleware, logger)
-            )
+        } else {
             res.render('index.hbs', {
                 _html: renderToString(
                         <Provider store={store}>
                             <RouterAppService req={req}/>
                         </Provider>
                     ),
-                _initData: JSON.stringify(initData)
+                _initData: JSON.stringify(initData),
+                ssr_model: true
             });
+        }
+    } catch (err) {
+        // 当try内的服务端渲染逻辑抛错时候，直接降级为SPA单页面渲染
+        fs.readFile('./dist/index.html', (err, data) => {
+            if (err) { return console.error(err) }
+    
+            res.setHeader('Content-Type', 'text/html;charset=utf-8');
+            res.send(data)
         })
-    } else {
-        res.render('index.hbs', {
-            _html: renderToString(
-                    <Provider store={store}>
-                        <RouterAppService req={req}/>
-                    </Provider>
-                ),
-             _initData: JSON.stringify(initData)
-        });
     }
 })
 // app.get('/*', function (req, res) {

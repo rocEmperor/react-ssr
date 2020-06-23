@@ -40,7 +40,10 @@ class RouterApp extends React.Component {
             <Router>
                 <Switch>
                     {parseRouteList.map((item, index) => {
-                        return <Route path={item.path} component={item.component} key={index}/>
+                        return <Route 
+                                    path={item.path} 
+                                    component={item.component} 
+                                    key={index} />
                     })}
                     <Route path="*" component={NoFound}/>
                 </Switch>
@@ -71,4 +74,4 @@ class RouterAppService extends React.Component {
     }
 }
 
-export { RouterApp, RouterAppService }
+export { RouterApp, RouterAppService, parseRouteList }

@@ -89,13 +89,13 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './src/index.hbs',
+            template: './src/template/index.hbs',
             filename: 'index.hbs'
         }),
-        // new HtmlWebpackPlugin({
-        //     template: './src/index.hbs',
-        //     filename: 'index.html'
-        // }),
+        new HtmlWebpackPlugin({
+            template: './src/template/index.html',
+            filename: 'index.html'
+        }),
         new MiniCssExtractPlugin({
             filename: "css/[name].css",
             chunkFilename: '[name].css?v=[contenthash:8]'  // use contenthash *

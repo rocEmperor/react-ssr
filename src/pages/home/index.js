@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import Request from '../../utils/request';
 import './index.less';
 import img from '../../../static/images/1.jpg';
 
@@ -7,25 +8,14 @@ class Home extends React.Component {
     static getInitialState () {
         return [
             new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve({ 
-                        homeModel: { name: '66686866868' } 
-                    })
-                }, 100)
+                Request({ url: 'api/test' }).then(function (data) {
+                    resolve({ homeModel: { name: data.name } })
+                })
             }),
             new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve({ 
-                        homeModel: { age: '很多很多很多很多' } 
-                    })
-                }, 100)
-            }),
-            new Promise((resolve, reject) => {
-                setTimeout(() => {
-                    resolve({ 
-                        aboutModel: { age: '很多很多很多很多' } 
-                    })
-                }, 100)
+                Request({ url: 'api/test' }).then(function (data) {
+                    resolve({ homeModel: { age: 'age很多很' } })
+                })
             })
         ]
     }
@@ -34,6 +24,9 @@ class Home extends React.Component {
         this.state = {
             name: '哈哈啊哈'
         }
+    }
+    componentDidMount () {
+        console.log(12121)
     }
     /**
      * 跳转about页面
