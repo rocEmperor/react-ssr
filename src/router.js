@@ -40,10 +40,7 @@ class RouterApp extends React.Component {
             <Router>
                 <Switch>
                     {parseRouteList.map((item, index) => {
-                        return <Route 
-                                    path={item.path} 
-                                    component={item.component} 
-                                    key={index} />
+                        return <Route path={item.path} component={item.component} key={index} />
                     })}
                     <Route path="*" component={NoFound}/>
                 </Switch>

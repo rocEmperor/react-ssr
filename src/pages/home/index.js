@@ -20,7 +20,7 @@ class Home extends React.Component {
         }
     }
     componentDidMount () {
-        console.log(12121)
+        console.log(57212227555)
     }
     /**
      * 跳转about页面

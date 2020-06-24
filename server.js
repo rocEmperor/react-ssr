@@ -18,6 +18,7 @@ const React = require('react');
 const { renderToString } = require('react-dom/server');
 const exphbs  = require('express-handlebars');
 const fs = require('fs');
+require('./watch.js')
 const { RouterAppService } = require('./src/router.js');
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
