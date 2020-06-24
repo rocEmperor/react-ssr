@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "start": "nodemon --exec babel-node server.js",
-        "dev": "npm run clean && webpack --watch --config build/webpack.base.config.js",
+        "dev": "npm run clean && webpack --watch --config build/webpack.dev.config.js",
+        "pro": "npm run clean && webpack --config build/webpack.pro.config.js",
         "clean": "node build/clean.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -42,17 +43,21 @@
         "file-loader": "^6.0.0",
         "hbs": "^4.1.1",
         "html-webpack-plugin": "^4.3.0",
+        "imagemin-mozjpeg": "^6.0.0",
         "less-loader": "^6.1.1",
         "mini-css-extract-plugin": "^0.9.0",
         "node-sass": "^4.14.1",
         "node-watch": "^0.6.4",
+        "optimize-css-assets-webpack-plugin": "^5.0.3",
         "postcss-cssnext": "^3.1.0",
         "postcss-less": "^3.1.4",
         "postcss-loader": "^3.0.0",
         "rimraf": "^3.0.2",
         "sass-loader": "^8.0.2",
         "url-loader": "^4.1.0",
+        "vconsole-webpack-plugin": "^1.5.1",
         "webpack": "^4.43.0",
-        "webpack-cli": "^3.3.12"
+        "webpack-cli": "^3.3.12",
+        "webpack-merge": "^4.2.2"
     }
 }

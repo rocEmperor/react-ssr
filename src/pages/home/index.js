@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Request from '../../utils/request';
 import './index.less';
-import img from '../../../static/images/1.jpg';
+import img from '../../../static/images/1.png';
 
 class Home extends React.Component {
     // 首次渲染时的钩子，写法上比较有限制（必须使用async + await），此钩子不管是服务端渲染还是单页面（SPA）渲染都会被调用
@@ -20,7 +20,7 @@ class Home extends React.Component {
         }
     }
     componentDidMount () {
-        console.log(57212227555)
+        console.log(9900)
     }
     /**
      * 跳转about页面
